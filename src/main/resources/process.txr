@@ -1,0 +1,93 @@
+package me.psalguero.kata01;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static java.lang.Character.getNumericValue;
+
+public class ConvertNumberToRoman {
+
+  private final static List<String> symbolsRomans = Arrays.asList("I", "V", "X", "L", "C", "M");
+  private final static String EMPTY = "";
+
+  public String convert(Integer naturalNumber) {
+    char[] digits = naturalNumber.toString().toCharArray();
+
+    if (digits.length >= 2) {
+      String tenToRoman = generateRomanFromNaturalNumber(getNumericValue(digits[0]), 2, 3, 4);
+      String unitsToRoman = generateRomanFromNaturalNumber(getNumericValue(digits[1]), 0, 1, 2);
+      return tenToRoman + unitsToRoman;
+    }
+
+    if (digits.length >= 1) {
+      return generateUnitsFromNumber(getNumericValue(digits[0]));
+    }
+
+    return "";
+  }
+
+  private String generateUnitsFromNumber(int naturalNumber) {
+    switch (naturalNumber) {
+      case 4:
+        return symbolsRomans.get(0) + symbolsRomans.get(1);
+      case 9:
+        return symbolsRomans.get(0) + symbolsRomans.get(2);
+    }
+
+    if (naturalNumber <= 3) {
+      return addXRomanFromNumberAndstartNumber(naturalNumber, 1, EMPTY, symbolsRomans.get(0));
+    }
+
+    if (naturalNumber <= 8) {
+      return addXRomanFromNumberAndstartNumber(naturalNumber, 6, symbolsRomans.get(1), symbolsRomans.get(0));
+    }
+
+    return null;
+  }
+
+  private String generateTenFromNumber(int naturalNumber) {
+    switch (naturalNumber) {
+      case 4:
+        return symbolsRomans.get(2) + symbolsRomans.get(3);
+      case 9:
+        return symbolsRomans.get(2) + symbolsRomans.get(4);
+    }
+
+    if (naturalNumber <= 3) {
+      return addXRomanFromNumberAndstartNumber(naturalNumber, 1, EMPTY, symbolsRomans.get(2));
+    }
+
+    if (naturalNumber <= 8) {
+      return addXRomanFromNumberAndstartNumber(naturalNumber, 6, symbolsRomans.get(3), symbolsRomans.get(2));
+    }
+
+    return null;
+  }
+
+  private String generateRomanFromNaturalNumber(int naturalNumber, final int x, final int y, final int z) {
+    switch (naturalNumber) {
+      case 4:
+        return symbolsRomans.get(x) + symbolsRomans.get(y);
+      case 9:
+        return symbolsRomans.get(x) + symbolsRomans.get(z);
+    }
+
+    if (naturalNumber <= 3) {
+      return addXRomanFromNumberAndstartNumber(naturalNumber, 1, EMPTY, symbolsRomans.get(x));
+    }
+
+    if (naturalNumber <= 8) {
+      return addXRomanFromNumberAndstartNumber(naturalNumber, 6, symbolsRomans.get(y), symbolsRomans.get(x));
+    }
+
+    return null;
+  }
+
+  private String addXRomanFromNumberAndstartNumber(int naturalNumber, int startNumber, String startResult, String addCharacter) {
+    String romanResult = startResult;
+    for (int index = startNumber; index <= naturalNumber; index++) {
+      romanResult += addCharacter;
+    }
+    return romanResult;
+  }
+}
